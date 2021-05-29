@@ -376,7 +376,7 @@ function base64encode(str) {
 function viewImgBtnOnClick() {
     $("#viewImgBtn").prop('disabled', true);
     input_txt_url = $("#input_url_view_image").val().trim();
-    var image_name = input_txt_url.replace('/^.*[\\\/]/', '');
+    var image_name = input_txt_url.substring(url.lastIndexOf('/') + 1);
     var image_type = image_name.split('.').pop();
     console.log(image_type);
     console.log(image_name);
@@ -394,14 +394,14 @@ function viewImgBtnOnClick() {
 
         function handleResponse(response) {
             console.log(response);
-            if (response != null) {
+            if (response.status == 500) {
+                snackbar.labelText = "There is an error.";
+            } else {
                 snackbar.labelText = "Retrive Successful.";
                 image_base64 = response.image
                 console.log(image_base64);
                 $('#viewImg').attr("src", `data:image/${image_type};base64,${image_base64}`);
                 populateList("#imglist3", response.tags);
-            } else {
-                snackbar.labelText = "There is an error.";
             }
             snackbar.open();
             $("#viewImgBtn").prop('disabled', false);
