@@ -214,6 +214,7 @@ function searchbyTagBtnOnClick() {
 function searchImgBtnOnClick() {
     $("#searchbyTagBtn").prop('disabled', true);
     base64_image = $("#blah2").attr("src");
+    base64_image = base64_image.substr(base64_image.indexOf("base64,") + 7);
     if (base64_image != undefined && base64_image != null) {
         var json_data = {
             "image": base64_image
