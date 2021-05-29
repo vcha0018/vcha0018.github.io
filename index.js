@@ -1,7 +1,7 @@
 // var MDCTabBar = require('@material/tab-bar');
 // import {MDCTabBar} from '.material/tab-bar';
 
-const session_token = "";
+var session_token = "";
 const api_base_uri = "https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/"
 const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
 [].map.call(document.querySelectorAll(selector), function (el) {
