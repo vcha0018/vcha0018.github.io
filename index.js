@@ -363,8 +363,8 @@ function viewImgBtnOnClick() {
         });
 
         function handleResponse(response) {
-            console.log(response);
-            if (response.statusCode == 200) {
+            // console.log(response);
+            if (response != null) {
                 snackbar.labelText = "Retrive Successful.";
                 $('#viewImg').attr("src", `data:image/${image_type};base64,${base64encode(response)}`);
             } else {
