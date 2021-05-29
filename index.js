@@ -356,6 +356,10 @@ function populateList(list_id, list_items) {
     }
 }
 
+function signOutBtnOnClick() {
+    window.location.href = `${login_url}?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`;
+}
+
 function initializeUI() {
     main_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.main_tabbar'));
     child_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.child_tabbar'));
@@ -452,6 +456,7 @@ function initializeUI() {
     $("#updateImgBtn").bind("click", updateImgBtnOnClick);
     $("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
     $("#viewImgBtn").bind("click", viewImgBtnOnClick);
+    $("#signOutBtn").bind("click", signOutBtnOnClick);
 
     $("#input_tags_search").bind("input", input_tags_searchOnInputChange);
     $("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
