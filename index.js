@@ -395,6 +395,7 @@ function viewImgBtnOnClick() {
             if (response != null) {
                 snackbar.labelText = "Retrive Successful.";
                 image_base64 = base64encode(response);
+                console.log(image_base64);
                 $('#viewImg').attr("src", `data:image/${image_type};base64,${image_base64}`);
             } else {
                 snackbar.labelText = "There is an error.";
