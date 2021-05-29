@@ -213,13 +213,8 @@ function searchbyTagBtnOnClick() {
 
 function searchImgBtnOnClick() {
     $("#searchbyTagBtn").prop('disabled', true);
-    input_txt = $("#input_tags_search").val().trim();
-    var c = document.getElementById("viewImgCanvas");
-    var ctx = c.getContext("2d");
-    var img = document.getElementById("viewImg");
-    ctx.drawImage(img, 10, 10);
-    base64_image = c.toDataURL();
-    if (!input_tags.includes(undefined) && !input_tags.includes("")) {
+    base64_image = $("#blah2").attr("src");
+    if (base64_image != undefined && base64_image != null) {
         var json_data = {
             "image": base64_image
         };
@@ -251,7 +246,7 @@ function searchImgBtnOnClick() {
             $("#searchbyTagBtn").prop('disabled', false);
         }
     } else {
-        snackbar.labelText = "Not a valid tag string.";
+        snackbar.labelText = "Not a valid image.";
         snackbar.open();
     }
 }
@@ -334,7 +329,7 @@ function deleteImgBtnOnClick() {
 
         function handleResponse(response) {
             console.log(response);
-            if (response.statusCode == 200) {
+            if (response.status == 200) {
                 snackbar.labelText = "Delete Successful.";
             } else {
                 snackbar.labelText = "There is an error.";
@@ -360,11 +355,6 @@ function viewImgBtnOnClick() {
         $.ajax({
             method: 'GET',
             url: get_url,
-            dataType: "jsonp",
-            headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Headers": "*"
-            },
             // beforeSend: function (xhr) {
             //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
             // },
