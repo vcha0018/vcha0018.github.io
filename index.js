@@ -1,111 +1,3 @@
-// var MDCTabBar = require('@material/tab-bar');
-// import {MDCTabBar} from '.material/tab-bar';
-
-var session_token = "";
-const api_base_uri = "https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/"
-const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
-[].map.call(document.querySelectorAll(selector), function (el) {
-    return new mdc.ripple.MDCRipple(el);
-});
-[].map.call(document.querySelectorAll('.mdc-text-field'), function (el) {
-    return new mdc.textField.MDCTextField(el);
-});
-const main_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.main_tabbar'));
-const child_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.child_tabbar'));
-const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
-snackbar.timeoutMs = 4000;
-snackbar.closeOnEscape = true;
-
-$("#uploadImgBtn").prop('disabled', true);
-$("#searchbyTagBtn").prop('disabled', true);
-$("#searchImgBtn").prop('disabled', true);
-$("#viewImgBtn").prop('disabled', true);
-$("#updateImgBtn").prop('disabled', true);
-$("#deleteImgBtn").prop('disabled', true);
-
-
-$("#query_div").css("display", "none");
-$("#upload_div").css("display", "block");
-main_tabBar.listen('MDCTabBar:activated', function (event) {
-    // let tab = tabs[event.detail.index];
-    // console.log(tab.children[0].children[1].textContent, 'tab activated');
-    if (event.detail.index == 0) {
-        $("#primaryTxt").text("Select an Image and than click Upload button.")
-        $("#query_div").css("display", "none");
-        $("#upload_div").css("display", "block");
-
-    }
-    else if (event.detail.index == 1) {
-        $("#primaryTxt").text("Query Operaions")
-        $("#upload_div").css("display", "none");
-        $("#query_div").css("display", "block");
-
-    }
-});
-$("#search_by_image_div").css("display", "none");
-$("#update_tags_div").css("display", "none");
-$("#delete_image_div").css("display", "none");
-$("#view_image_div").css("display", "none");
-$("#search_by_tags_div").css("display", "block");
-main_tabBar.activateTab(0);
-child_tabBar.listen('MDCTabBar:activated', function (event) {
-    if (event.detail.index == 0) {
-        $("#search_by_image_div").css("display", "none");
-        $("#update_tags_div").css("display", "none");
-        $("#delete_image_div").css("display", "none");
-        $("#view_image_div").css("display", "none");
-        $("#search_by_tags_div").css("display", "block");
-
-    } else if (event.detail.index == 1) {
-        $("#search_by_tags_div").css("display", "none");
-        $("#update_tags_div").css("display", "none");
-        $("#delete_image_div").css("display", "none");
-        $("#view_image_div").css("display", "none");
-        $("#search_by_image_div").css("display", "block");
-
-    } else if (event.detail.index == 2) {
-        $("#search_by_tags_div").css("display", "none");
-        $("#delete_image_div").css("display", "none");
-        $("#search_by_image_div").css("display", "none");
-        $("#update_tags_div").css("display", "none");
-        $("#view_image_div").css("display", "block");
-
-    } else if (event.detail.index == 3) {
-        $("#search_by_tags_div").css("display", "none");
-        $("#search_by_image_div").css("display", "none");
-        $("#view_image_div").css("display", "none");
-        $("#delete_image_div").css("display", "none");
-        $("#update_tags_div").css("display", "block");
-
-    } else if (event.detail.index == 4) {
-        $("#search_by_tags_div").css("display", "none");
-        $("#search_by_image_div").css("display", "none");
-        $("#view_image_div").css("display", "none");
-        $("#update_tags_div").css("display", "none");
-        $("#delete_image_div").css("display", "block");
-
-    }
-});
-child_tabBar.activateTab(0);
-
-const selectFileBtn = document.getElementById("selectFileBtn");
-
-$("#selectFileBtn").bind("click", selectFileBtnOnClick);
-$("#selectFileBtn2").bind("click", selectFile2BtnOnClick);
-$("#uploadImgBtn").bind("click", uploadImgBtnOnClick);
-$("#selectFile").bind("change", selectFileChanged);
-$("#selectFile2").bind("change", selectFile2Changed);
-$("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
-$("#searchImgBtn").bind("click", searchImgBtnOnClick);
-$("#updateImgBtn").bind("click", updateImgBtnOnClick);
-$("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
-$("#viewImgBtn").bind("click", viewImgBtnOnClick);
-
-$("#input_tags_search").bind("input", input_tags_searchOnInputChange);
-$("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
-$("#input_url_update").bind("input", input_url_updateOnInputChange);
-$("#input_tags_update").bind("input", input_tags_updateOnInputChange);
-$("#input_img_delete").bind("input", input_img_deleteOnInputChange);
 
 function selectFileBtnOnClick() {
     $("#selectFile").trigger("click");
@@ -116,6 +8,7 @@ function selectFile2BtnOnClick() {
 }
 
 function uploadImgBtnOnClick() {
+    check_session();
     $("#uploadImgBtn").prop('disabled', true);
     var image_name = "image_" + new Date().getTime();
     var image_file = $("#selectFile")[0].files[0];
@@ -165,6 +58,7 @@ function selectFile2Changed() {
 }
 
 function searchbyTagBtnOnClick() {
+    check_session();
     $("#searchbyTagBtn").prop('disabled', true);
     input_txt = $("#input_tags_search").val().trim();
     if (input_txt != null && input_txt != "") {
@@ -217,6 +111,7 @@ function searchbyTagBtnOnClick() {
 }
 
 function searchImgBtnOnClick() {
+    check_session();
     $("#searchImgBtn").prop('disabled', true);
     base64_image = $("#blah2").attr("src");
     base64_image = base64_image.substr(base64_image.indexOf("base64,") + 7);
@@ -259,6 +154,7 @@ function searchImgBtnOnClick() {
 }
 
 function updateImgBtnOnClick() {
+    check_session();
     $("#updateImgBtn").prop('disabled', true);
     input_txt_tags = $("#input_tags_update").val().trim();
     input_txt_url = $("#input_url_update").val().trim();
@@ -313,6 +209,7 @@ function updateImgBtnOnClick() {
 }
 
 function deleteImgBtnOnClick() {
+    check_session();
     $("#deleteImgBtn").prop('disabled', true);
     input_txt_url = $("#input_img_delete").val().trim();
     var image_name = input_txt_url.substring(input_txt_url.lastIndexOf('/') + 1);
@@ -346,6 +243,7 @@ function deleteImgBtnOnClick() {
 }
 
 function viewImgBtnOnClick() {
+    check_session();
     $("#viewImgBtn").prop('disabled', true);
     input_txt_url = $("#input_url_view_image").val().trim();
     var image_name = input_txt_url.substring(input_txt_url.lastIndexOf('/') + 1);
@@ -461,6 +359,106 @@ function populateList(list_id, list_items) {
         $(list_id).css('display', 'block');
     }
 }
+
+function initializeUI() {
+    [].map.call(document.querySelectorAll(selector), function (el) {
+        return new mdc.ripple.MDCRipple(el);
+    });
+    [].map.call(document.querySelectorAll('.mdc-text-field'), function (el) {
+        return new mdc.textField.MDCTextField(el);
+    });
+
+    $("#uploadImgBtn").prop('disabled', true);
+    $("#searchbyTagBtn").prop('disabled', true);
+    $("#searchImgBtn").prop('disabled', true);
+    $("#viewImgBtn").prop('disabled', true);
+    $("#updateImgBtn").prop('disabled', true);
+    $("#deleteImgBtn").prop('disabled', true);
+
+
+    $("#query_div").css("display", "none");
+    $("#upload_div").css("display", "block");
+    main_tabBar.listen('MDCTabBar:activated', function (event) {
+        // let tab = tabs[event.detail.index];
+        // console.log(tab.children[0].children[1].textContent, 'tab activated');
+        if (event.detail.index == 0) {
+            $("#primaryTxt").text("Select an Image and than click Upload button.")
+            $("#query_div").css("display", "none");
+            $("#upload_div").css("display", "block");
+
+        }
+        else if (event.detail.index == 1) {
+            $("#primaryTxt").text("Query Operaions")
+            $("#upload_div").css("display", "none");
+            $("#query_div").css("display", "block");
+
+        }
+    });
+    $("#search_by_image_div").css("display", "none");
+    $("#update_tags_div").css("display", "none");
+    $("#delete_image_div").css("display", "none");
+    $("#view_image_div").css("display", "none");
+    $("#search_by_tags_div").css("display", "block");
+    main_tabBar.activateTab(0);
+    child_tabBar.listen('MDCTabBar:activated', function (event) {
+        if (event.detail.index == 0) {
+            $("#search_by_image_div").css("display", "none");
+            $("#update_tags_div").css("display", "none");
+            $("#delete_image_div").css("display", "none");
+            $("#view_image_div").css("display", "none");
+            $("#search_by_tags_div").css("display", "block");
+
+        } else if (event.detail.index == 1) {
+            $("#search_by_tags_div").css("display", "none");
+            $("#update_tags_div").css("display", "none");
+            $("#delete_image_div").css("display", "none");
+            $("#view_image_div").css("display", "none");
+            $("#search_by_image_div").css("display", "block");
+
+        } else if (event.detail.index == 2) {
+            $("#search_by_tags_div").css("display", "none");
+            $("#delete_image_div").css("display", "none");
+            $("#search_by_image_div").css("display", "none");
+            $("#update_tags_div").css("display", "none");
+            $("#view_image_div").css("display", "block");
+
+        } else if (event.detail.index == 3) {
+            $("#search_by_tags_div").css("display", "none");
+            $("#search_by_image_div").css("display", "none");
+            $("#view_image_div").css("display", "none");
+            $("#delete_image_div").css("display", "none");
+            $("#update_tags_div").css("display", "block");
+
+        } else if (event.detail.index == 4) {
+            $("#search_by_tags_div").css("display", "none");
+            $("#search_by_image_div").css("display", "none");
+            $("#view_image_div").css("display", "none");
+            $("#update_tags_div").css("display", "none");
+            $("#delete_image_div").css("display", "block");
+
+        }
+    });
+    child_tabBar.activateTab(0);
+
+    $("#selectFileBtn").bind("click", selectFileBtnOnClick);
+    $("#selectFileBtn2").bind("click", selectFile2BtnOnClick);
+    $("#uploadImgBtn").bind("click", uploadImgBtnOnClick);
+    $("#selectFile").bind("change", selectFileChanged);
+    $("#selectFile2").bind("change", selectFile2Changed);
+    $("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
+    $("#searchImgBtn").bind("click", searchImgBtnOnClick);
+    $("#updateImgBtn").bind("click", updateImgBtnOnClick);
+    $("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
+    $("#viewImgBtn").bind("click", viewImgBtnOnClick);
+
+    $("#input_tags_search").bind("input", input_tags_searchOnInputChange);
+    $("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
+    $("#input_url_update").bind("input", input_url_updateOnInputChange);
+    $("#input_tags_update").bind("input", input_tags_updateOnInputChange);
+    $("#input_img_delete").bind("input", input_img_deleteOnInputChange);
+
+}
+
 function readTokens() {
     // reading id token from the url post login
     current_url = window.location.href;
@@ -470,6 +468,27 @@ function readTokens() {
 
 function main() {
     readTokens();
+    check_session();
+    initializeUI();
 }
 
+function check_session() {
+    if (session_token == "") {
+        window.location.href = login_url;
+    }
+}
+
+const login_url = "https://team33domain.auth.us-east-1.amazoncognito.com/login";
+const client_id = "6h3kq0n8774d9ae6bscio6d9nc";
+const response_type = "token";
+const redirect_uri = "https://vcha0018.github.io/";
+var session_token = "";
+const api_base_uri = "https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/"
+const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
+const main_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.main_tabbar'));
+const child_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.child_tabbar'));
+const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+const selectFileBtn = document.getElementById("selectFileBtn");
+snackbar.timeoutMs = 4000;
+snackbar.closeOnEscape = true;
 main();
