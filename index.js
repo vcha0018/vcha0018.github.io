@@ -351,7 +351,7 @@ function viewImgBtnOnClick() {
     console.log(image_type);
     console.log(image_name);
     if (image_name != undefined && image_name != "") {
-        var get_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
+        var get_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}`
         $.ajax({
             method: 'GET',
             url: get_url,
