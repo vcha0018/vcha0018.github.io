@@ -1,340 +1,309 @@
-<!DOCTYPE html>
-<html>
+// var MDCTabBar = require('@material/tab-bar');
+// import {MDCTabBar} from '.material/tab-bar';
 
-<head>
-    <title>S3 Static Site</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-    <link rel='stylesheet' href='index.css'>
+const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
+[].map.call(document.querySelectorAll(selector), function (el) {
+    return new mdc.ripple.MDCRipple(el);
+});
+[].map.call(document.querySelectorAll('.mdc-text-field'), function (el) {
+    return new mdc.textField.MDCTextField(el);
+});
+const main_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.main_tabbar'));
+const child_tabBar = mdc.tabBar.MDCTabBar.attachTo(document.querySelector('.child_tabbar'));
+const snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+snackbar.timeoutMs = 4000;
+snackbar.closeOnEscape = true;
 
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    <script src="jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: 'Roboto', 'sans-serif', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana';
-            margin: 10px;
+$("#uploadImgBtn").prop('disabled', true);
+$("#searchbyTagBtn").prop('disabled', true);
+$("#searchImgBtn").prop('disabled', true);
+$("#viewImgBtn").prop('disabled', true);
+$("#updateImgBtn").prop('disabled', true);
+$("#deleteImgBtn").prop('disabled', true);
+
+
+$("#query_div").css("display", "none");
+$("#upload_div").css("display", "block");
+main_tabBar.listen('MDCTabBar:activated', function (event) {
+    // let tab = tabs[event.detail.index];
+    // console.log(tab.children[0].children[1].textContent, 'tab activated');
+    if (event.detail.index == 0) {
+        $("#primaryTxt").text("Select an Image and than click Upload button.")
+        $("#query_div").css("display", "none");
+        $("#upload_div").css("display", "block");
+
+    }
+    else if (event.detail.index == 1) {
+        $("#primaryTxt").text("Query Operaions")
+        $("#upload_div").css("display", "none");
+        $("#query_div").css("display", "block");
+
+    }
+});
+$("#search_by_image_div").css("display", "none");
+$("#update_tags_div").css("display", "none");
+$("#delete_image_div").css("display", "none");
+$("#view_image_div").css("display", "none");
+$("#search_by_tags_div").css("display", "block");
+main_tabBar.activateTab(0);
+child_tabBar.listen('MDCTabBar:activated', function (event) {
+    if (event.detail.index == 0) {
+        $("#search_by_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#search_by_tags_div").css("display", "block");
+
+    } else if (event.detail.index == 1) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#search_by_image_div").css("display", "block");
+
+    } else if (event.detail.index == 2) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#search_by_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#view_image_div").css("display", "block");
+
+    } else if (event.detail.index == 3) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#search_by_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "block");
+
+    } else if (event.detail.index == 4) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#search_by_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "block");
+
+    }
+});
+child_tabBar.activateTab(0);
+
+const selectFileBtn = document.getElementById("selectFileBtn");
+
+$("#selectFileBtn").bind("click", selectFileBtnOnClick);
+$("#selectFileBtn2").bind("click", selectFile2BtnOnClick);
+$("#uploadImgBtn").bind("click", uploadImgBtnOnClick);
+$("#selectFile").bind("change", selectFileChanged);
+$("#selectFile2").bind("change", selectFile2Changed);
+$("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
+$("#searchImgBtn").bind("click", searchImgBtnOnClick);
+$("#updateImgBtn").bind("click", updateImgBtnOnClick);
+$("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
+
+$("#input_tags_search").bind("input", input_tags_searchOnInputChange);
+$("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
+$("#input_url_update").bind("input", input_url_updateOnInputChange);
+$("#input_tags_update").bind("input", input_tags_updateOnInputChange);
+$("#input_img_delete").bind("input", input_img_deleteOnInputChange);
+
+function selectFileBtnOnClick() {
+    $("#selectFile").trigger("click");
+}
+
+function selectFile2BtnOnClick() {
+    $("#selectFile2").trigger("click");
+}
+
+function uploadImgBtnOnClick() {
+    $("#uploadImgBtn").prop('disabled', true);
+    var image_name = "image_" + new Date().getTime();
+    var image_file = $("#selectFile")[0].files[0];
+    var content_type = image_file.type;
+    console.log(content_type);
+    console.log(image_name);
+    if (content_type.includes("image/")) {
+        var formData = new FormData();
+        var put_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}.${content_type.substr(6)}`
+        console.log(put_url);
+        formData.append("file", image_file);
+        $.ajax({
+            type: 'PUT',
+            url: put_url,
+            data: formData,
+            cache: false,
+            contentType: content_type,
+            processData: false,
+            success: handleResponse,
+            error: handleResponse
+        });
+
+        function handleResponse(response) {
+            console.log(response);
+            var message = response.status == 200 ? "Upload Successful." : "Upload failed.";
+            snackbar.labelText = message;
+            snackbar.open();
+            $("#uploadImgBtn").prop('disabled', false);
+        }
+    } else {
+        snackbar.labelText = "Not a valid image.";
+        snackbar.open();
+    }
+}
+
+function selectFileChanged() {
+    readURL(this, '#blah');
+    $("#uploadImgBtn").prop('disabled', false);
+
+}
+
+function selectFile2Changed() {
+    readURL(this, '#blah2');
+    $("#searchImgBtn").prop('disabled', false);
+}
+
+function searchbyTagBtnOnClick() {
+
+    $("#searchbyTagBtn").prop('disabled', true);
+    input_txt = $("#input_tags_search").val().trim();
+    if (input_txt != null && input_txt != "") {
+        if (input_txt.includes(",")) {
+            var input_tags = input_txt.split(",").map(function (value) {
+                return value.trim();
+            });
+        } else {
+            input_tags = [input_txt];
+        }
+    } else if (input_txt == "") {
+        input_tags = []
+    }
+    if (!input_tags.includes(undefined) && !input_tags.includes("")) {
+        console.log(input_tags);
+        var json_data = {
+            "tags": input_tags
+        };
+        var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
+        $.ajax({
+            method: 'POST',
+            url: post_url,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            // beforeSend: function (xhr) {
+            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+            // },
+            data: JSON.stringify(json_data),
+            success: handleResponse,
+            error: handleResponse
+        });
+
+        function handleResponse(response) {
+            console.log(response);
+            if (response.statusCode == 200) {
+                snackbar.labelText = "Search Successful.";
+                populateList("#imglist1", response.body.links);
+            } else {
+                snackbar.labelText = "There is an error.";
+            }
+            snackbar.open();
+            $("#searchbyTagBtn").prop('disabled', false);
+        }
+    } else {
+        snackbar.labelText = "Not a valid tag string.";
+        snackbar.open();
+    }
+}
+
+function searchImgBtnOnClick() {
+
+}
+
+function updateImgBtnOnClick() {
+
+}
+
+function deleteImgBtnOnClick() {
+
+}
+
+function input_tags_searchOnInputChange() {
+    if ($(this).val() != undefined && $(this).val() != null && $(this).val() != "") {
+        $("#searchbyTagBtn").prop('disabled', false);
+    } else {
+        $("#searchbyTagBtn").prop('disabled', true);
+    }
+}
+
+function input_url_view_imageOnInputChange() {
+    if ($(this).val() != undefined && $(this).val() != null && $(this).val() != "") {
+        $("#viewImgBtn").prop('disabled', false);
+
+    } else {
+        $("#viewImgBtn").prop('disabled', true);
+
+    }
+}
+
+function input_url_updateOnInputChange() {
+    tags_input_val = $("#input_tags_update").val();
+    if ($(this).val() != undefined && $(this).val() != null && $(this).val() != "" &&
+        tags_input_val != undefined && tags_input_val != null && tags_input_val != "") {
+        $("#updateImgBtn").prop('disabled', false);
+
+    } else {
+        $("#updateImgBtn").prop('disabled', true);
+
+    }
+}
+
+function input_tags_updateOnInputChange() {
+    url_input_val = $("#input_url_update").val();
+    if ($(this).val() != undefined && $(this).val() != null && $(this).val() != "" &&
+        url_input_val != undefined && url_input_val != null && url_input_val != "") {
+        $("#updateImgBtn").prop('disabled', false);
+
+    } else {
+        $("#updateImgBtn").prop('disabled', true);
+
+    }
+}
+
+function input_img_deleteOnInputChange() {
+    if ($(this).val() != undefined && $(this).val() != null && $(this).val() != "") {
+        $("#deleteImgBtn").prop('disabled', false);
+
+    } else {
+        $("#deleteImgBtn").prop('disabled', true);
+
+    }
+}
+
+function readURL(input, imgid) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $(imgid).attr('src', e.target.result);
         }
 
-        h1 {
-            padding-top: 20px;
-            padding-left: 20px;
-            padding-bottom: 10px;
-        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 
-        .main_card {
-            margin-left: 20px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            margin-right: 20px;
-        }
+function populateList(list_id, list_items) {
+    $(list_id).empty();
+    if (list_items != null && list_items.length > 0) {
+        list_items.forEach(function (item, index) {
+            $(list_id).append(`
+            <li class="mdc-list-item list_item">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">${item}</span>
+            </li>`);
+        });
+        $(list_id).css('display', 'block');
+    }
+}
 
-        .card-btn {
-            width: 50%;
-            margin-top: 10px;
-        }
-
-        .select_image {
-            width: inherit;
-            height: 400px;
-            margin: auto;
-        }
-
-        .primary-text {
-            padding-left: 20px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            font-size: 20px;
-        }
-
-        .secondary-text {
-            padding-left: 20px;
-            padding-top: 5px;
-            font-size: 14px;
-        }
-
-        .chip {
-            display: inline-block;
-            padding: 0 25px;
-            height: 40px;
-            font-size: 15px;
-            line-height: 40px;
-            border-radius: 25px;
-            background-color: #f1f1f1;
-            margin: 10px;
-        }
-
-        .closebtn {
-            padding-left: 10px;
-            color: #888;
-            font-weight: bold;
-            float: right;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .closebtn:hover {
-            color: #000;
-        }
-
-        .list_item {
-            padding: 5px;
-        }
-    </style>
-</head>
-
-<body>
-    <h1>Welecome to Image Processing Web Engine!</h1>
-    <div class="mdc-card mdc-card--outlined main_card">
-        <!-- Tab bar -->
-        <div class="mdc-tab-bar main_tabbar" role="tablist">
-            <div class="mdc-tab-scroller">
-                <div class="mdc-tab-scroller__scroll-area">
-                    <div class="mdc-tab-scroller__scroll-content">
-                        <button class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
-                            <span class="mdc-tab__content">
-                                <span class="mdc-tab__icon material-icons" aria-hidden="true">cloud_upload</span>
-                                <span class="mdc-tab__text-label">Upload an Image</span>
-                            </span>
-                            <span class="mdc-tab-indicator mdc-tab-indicator--active">
-                                <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                            </span>
-                            <span class="mdc-tab__ripple"></span>
-                        </button>
-                        <button class="mdc-tab" role="tab" aria-selected="false" tabindex="1">
-                            <span class="mdc-tab__content">
-                                <span class="mdc-tab__icon material-icons"
-                                    aria-hidden="true">settings_system_daydream</span>
-                                <span class="mdc-tab__text-label">Make a Query</span>
-                            </span>
-                            <span class="mdc-tab-indicator">
-                                <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                            </span>
-                            <span class="mdc-tab__ripple"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Header text -->
-        <div class="primary-title">
-            <div id="primaryTxt" class="primary-text">Select an Image and than click Upload button.</div>
-        </div>
-
-        <div id="upload_div" style="display: block;">
-            <input id="selectFile" type="file" accept="image/*" style="display: none;">
-            <div style="margin: auto; display: flex;">
-                <img id="blah" src="#" alt="selected image" class="select_image" />
-            </div>
-            <div style="display: grid; width: 50%; margin: auto;">
-                <button id="selectFileBtn" class="mdc-button mdc-button--outlined" style="margin-top: 10px;">
-                    <span class="mdc-button__ripple"></span>
-                    <span class="mdc-button__label">Select Image</span>
-                </button>
-                <button id="uploadImgBtn" class="mdc-button mdc-button--raised" style="margin-top: 10px;">
-                    <span class="mdc-button__label">Upload Image</span>
-                </button>
-            </div>
-        </div>
-
-        <div id="query_div" style="display: none; padding: 20px;">
-            <div class="mdc-tab-bar child_tabbar" role="tablist">
-                <div class="mdc-tab-scroller">
-                    <div class="mdc-tab-scroller__scroll-area">
-                        <div class="mdc-tab-scroller__scroll-content">
-                            <button class="mdc-tab mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
-                                <span class="mdc-tab__content">
-                                    <span class="mdc-tab__icon material-icons" aria-hidden="true">manage_search</span>
-                                    <span class="mdc-tab__text-label">Search by Tags</span>
-                                </span>
-                                <span class="mdc-tab-indicator mdc-tab-indicator--active">
-                                    <span
-                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                                </span>
-                                <span class="mdc-tab__ripple"></span>
-                            </button>
-                            <button class="mdc-tab" role="tab" aria-selected="false" tabindex="1">
-                                <span class="mdc-tab__content">
-                                    <span class="mdc-tab__icon material-icons" aria-hidden="true">image_search</span>
-                                    <span class="mdc-tab__text-label">Search by Image</span>
-                                </span>
-                                <span class="mdc-tab-indicator">
-                                    <span
-                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                                </span>
-                                <span class="mdc-tab__ripple"></span>
-                            </button>
-                            <button class="mdc-tab" role="tab" aria-selected="false" tabindex="2">
-                                <span class="mdc-tab__content">
-                                    <span class="mdc-tab__icon material-icons" aria-hidden="true">panorama</span>
-                                    <span class="mdc-tab__text-label">View Image</span>
-                                </span>
-                                <span class="mdc-tab-indicator">
-                                    <span
-                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                                </span>
-                                <span class="mdc-tab__ripple"></span>
-                            </button>
-                            <button class="mdc-tab" role="tab" aria-selected="false" tabindex="3">
-                                <span class="mdc-tab__content">
-                                    <span class="mdc-tab__icon material-icons" aria-hidden="true">bookmark_add</span>
-                                    <span class="mdc-tab__text-label">Update Tags</span>
-                                </span>
-                                <span class="mdc-tab-indicator">
-                                    <span
-                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                                </span>
-                                <span class="mdc-tab__ripple"></span>
-                            </button>
-                            <button class="mdc-tab" role="tab" aria-selected="false" tabindex="4">
-                                <span class="mdc-tab__content">
-                                    <span class="mdc-tab__icon material-icons" aria-hidden="true">delete</span>
-                                    <span class="mdc-tab__text-label">Delete Image</span>
-                                </span>
-                                <span class="mdc-tab-indicator">
-                                    <span
-                                        class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                                </span>
-                                <span class="mdc-tab__ripple"></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="search_by_tags_div">
-                <label class="mdc-text-field mdc-text-field--outlined" style="width: 50%; margin: 20px;">
-                    <span class="mdc-notched-outline">
-                        <span class="mdc-notched-outline__leading"></span>
-                        <span class="mdc-notched-outline__notch">
-                            <span class="mdc-floating-label" id="label_tags_search">Enter tags to search images</span>
-                        </span>
-                        <span class="mdc-notched-outline__trailing"></span>
-                    </span>
-                    <input id="input_tags_search" type="text" class="mdc-text-field__input"
-                        aria-labelledby="my-label-id">
-                </label>
-                <button id="searchbyTagBtn" class="mdc-button mdc-button--raised" style="margin: 20px; height: 55px;">
-                    <span class="mdc-button__label">Search</span>
-                </button>
-                <ul id="imglist1" class="mdc-list" style="margin: 20px; display: none;">
-                </ul>
-            </div>
-            <div id="search_by_image_div" style="margin: 20px 0px 0px 20px;">
-                <input id="selectFile2" type="file" accept="image/*" style="display: none;">
-                <div>
-                    <button id="selectFileBtn2" class="mdc-button mdc-button--outlined">
-                        <span class="mdc-button__ripple"></span>
-                        <span class="mdc-button__label">Select Image</span>
-                    </button>
-                </div>
-                <div style="display: inline-grid; margin: 10px 0px;">
-                    <img id="blah2" src="#" alt="selected image" style="height: 200px; width: 300px;" />
-                </div>
-                <div>
-                    <button id="searchImgBtn" class="mdc-button mdc-button--raised">
-                        <span class="mdc-button__label">Search</span>
-                    </button>
-                </div>
-                <ul id="imglist2" class="mdc-list" style="margin: 20px; display: none;">
-                </ul>
-            </div>
-            <div id="view_image_div">
-                <label class="mdc-text-field mdc-text-field--outlined" style="width: 50%; margin: 20px;">
-                    <span class="mdc-notched-outline">
-                        <span class="mdc-notched-outline__leading"></span>
-                        <span class="mdc-notched-outline__notch">
-                            <span class="mdc-floating-label" id="label_url_view_image">Enter url of image or image
-                                name</span>
-                        </span>
-                        <span class="mdc-notched-outline__trailing"></span>
-                    </span>
-                    <input id="input_url_view_image" type="text" class="mdc-text-field__input"
-                        aria-labelledby="my-label-id">
-                </label>
-                <button id="viewImgBtn" class="mdc-button mdc-button--raised" style="margin: 20px; height: 55px;">
-                    <span class="mdc-button__label">Retrive</span>
-                </button>
-                <div style="display: block; margin: 20px;">
-                    <img id="blah2" src="#" alt="image" style="height: 200px; width: 300px;" />
-                </div>
-            </div>
-            <div id="update_tags_div">
-                <label class="mdc-text-field mdc-text-field--outlined" style="width: 50%; margin: 20px;">
-                    <span class="mdc-notched-outline">
-                        <span class="mdc-notched-outline__leading"></span>
-                        <span class="mdc-notched-outline__notch">
-                            <span class="mdc-floating-label" id="label_url_update">Enter url of image or image
-                                name</span>
-                        </span>
-                        <span class="mdc-notched-outline__trailing"></span>
-                    </span>
-                    <input id="input_url_update" type="text" class="mdc-text-field__input"
-                        aria-labelledby="my-label-id">
-                </label>
-                <label class="mdc-text-field mdc-text-field--outlined" style="width: 50%; margin: 20px;">
-                    <span class="mdc-notched-outline">
-                        <span class="mdc-notched-outline__leading"></span>
-                        <span class="mdc-notched-outline__notch">
-                            <span class="mdc-floating-label" id="label_tags_update">Enter new tags to append</span>
-                        </span>
-                        <span class="mdc-notched-outline__trailing"></span>
-                    </span>
-                    <input id="input_tags_update" type="text" class="mdc-text-field__input"
-                        aria-labelledby="my-label-id">
-                </label>
-                <button id="updateImgBtn" class="mdc-button mdc-button--raised" style="margin: 20px; height: 55px;">
-                    <span class="mdc-button__label">Update</span>
-                </button>
-            </div>
-            <div id="delete_image_div">
-                <label class="mdc-text-field mdc-text-field--outlined" style="width: 50%; margin: 20px;">
-                    <span class="mdc-notched-outline">
-                        <span class="mdc-notched-outline__leading"></span>
-                        <span class="mdc-notched-outline__notch">
-                            <span class="mdc-floating-label" id="label_img_delete">Enter url of image or image
-                                name</span>
-                        </span>
-                        <span class="mdc-notched-outline__trailing"></span>
-                    </span>
-                    <input id="input_img_delete" type="text" class="mdc-text-field__input"
-                        aria-labelledby="my-label-id">
-                </label>
-                <button id="deleteImgBtn" class="mdc-button mdc-button--raised" style="margin: 20px; height: 55px;">
-                    <span class="mdc-button__label">Delete</span>
-                </button>
-            </div>
-
-        </div>
-
-        <div class="mdc-snackbar">
-            <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
-                <div class="mdc-snackbar__label" aria-atomic="false">
-                    Can't send photo. Retry in 5 seconds.
-                </div>
-                <!-- <div class="mdc-snackbar__actions" aria-atomic="true">
-                    <button type="button" class="mdc-button mdc-snackbar__action">
-                        <div class="mdc-button__ripple"></div>
-                        <span class="mdc-button__label">Retry</span>
-                    </button>
-                </div> -->
-            </div>
-        </div>
-
-        <script src='index.js'></script>
-</body>
-
-</html>
-<!-- <html>
-    <title>Upload a file</title>
-    <h3>Upload a File</h3>
-    <body>
-        <form method="POST" 
-        enctype="multipart/form-data" 
-        action="https://x3xtjl69xf.execute-api.us-east-1.amazonaws.com/prod/image_tasks/upload2">
-            Select File:
-            <input type="file" name="file">
-            <input type="submit" name="submit" value="upload">
-        
-        </form>
-    </body>
-</html> -->
+function generateNewChip(id, text) {
+    `<div class="chip">
+    ${text}
+    <span class="closebtn" onclick="this.parentElement.style.display='none'">&times;</span>
+    </div>`
+}
