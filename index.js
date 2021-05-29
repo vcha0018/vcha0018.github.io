@@ -119,42 +119,33 @@ function uploadImgBtnOnClick() {
     var image_name = "image_" + new Date().getTime();
     var image_file = $("#selectFile")[0].files[0];
     var content_type = image_file.type;
-    var reader = new FileReader();
-    reader.readAsDataURL(image_file);
-    reader.onload = function () {
-        console.log(content_type);
-        // image_file = reader.result.substr(reader.result.indexOf("base64,") + 7);
-        if (content_type.includes("image/")) {
-            var formData = new FormData();
-            var put_url = `${api_base_uri}image?key=${image_name}.${content_type.substr(6)}`
-            console.log(put_url);
-            formData.append("file", image_file);
-            $.ajax({
-                type: 'PUT',
-                url: put_url,
-                data: image_file,
-                cache: false,
-                contentType: content_type,
-                processData: false,
-                success: handleResponse,
-                error: handleResponse
-            });
+    if (content_type.includes("image/")) {
+        var formData = new FormData();
+        var put_url = `${api_base_uri}image?key=${image_name}.${content_type.substr(6)}`
+        console.log(put_url);
+        formData.append("file", image_file);
+        $.ajax({
+            type: 'PUT',
+            url: put_url,
+            data: image_file,
+            cache: false,
+            contentType: content_type,
+            processData: false,
+            success: handleResponse,
+            error: handleResponse
+        });
 
-            function handleResponse(response) {
-                console.log(response);
-                var message = response.status == 200 ? "Upload Successful." : "Upload failed.";
-                snackbar.labelText = message;
-                snackbar.open();
-                $("#uploadImgBtn").prop('disabled', false);
-            }
-        } else {
-            snackbar.labelText = "Not a valid image.";
+        function handleResponse(response) {
+            console.log(response);
+            var message = response.status == 200 ? "Upload Successful." : "Upload failed.";
+            snackbar.labelText = message;
             snackbar.open();
+            $("#uploadImgBtn").prop('disabled', false);
         }
+    } else {
+        snackbar.labelText = "Not a valid image.";
+        snackbar.open();
     }
-    reader.onerror = function (error) {
-        console.log('Error: ', error);
-    };
 }
 
 function selectFileChanged() {
