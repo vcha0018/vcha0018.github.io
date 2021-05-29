@@ -360,104 +360,104 @@ function populateList(list_id, list_items) {
     }
 }
 
-function initializeUI() {
-    [].map.call(document.querySelectorAll(selector), function (el) {
-        return new mdc.ripple.MDCRipple(el);
-    });
-    [].map.call(document.querySelectorAll('.mdc-text-field'), function (el) {
-        return new mdc.textField.MDCTextField(el);
-    });
+// function initializeUI() {
+[].map.call(document.querySelectorAll(selector), function (el) {
+    return new mdc.ripple.MDCRipple(el);
+});
+[].map.call(document.querySelectorAll('.mdc-text-field'), function (el) {
+    return new mdc.textField.MDCTextField(el);
+});
 
-    $("#uploadImgBtn").prop('disabled', true);
-    $("#searchbyTagBtn").prop('disabled', true);
-    $("#searchImgBtn").prop('disabled', true);
-    $("#viewImgBtn").prop('disabled', true);
-    $("#updateImgBtn").prop('disabled', true);
-    $("#deleteImgBtn").prop('disabled', true);
+$("#uploadImgBtn").prop('disabled', true);
+$("#searchbyTagBtn").prop('disabled', true);
+$("#searchImgBtn").prop('disabled', true);
+$("#viewImgBtn").prop('disabled', true);
+$("#updateImgBtn").prop('disabled', true);
+$("#deleteImgBtn").prop('disabled', true);
 
 
-    $("#query_div").css("display", "none");
-    $("#upload_div").css("display", "block");
-    main_tabBar.listen('MDCTabBar:activated', function (event) {
-        // let tab = tabs[event.detail.index];
-        // console.log(tab.children[0].children[1].textContent, 'tab activated');
-        if (event.detail.index == 0) {
-            $("#primaryTxt").text("Select an Image and than click Upload button.")
-            $("#query_div").css("display", "none");
-            $("#upload_div").css("display", "block");
+$("#query_div").css("display", "none");
+$("#upload_div").css("display", "block");
+main_tabBar.listen('MDCTabBar:activated', function (event) {
+    // let tab = tabs[event.detail.index];
+    // console.log(tab.children[0].children[1].textContent, 'tab activated');
+    if (event.detail.index == 0) {
+        $("#primaryTxt").text("Select an Image and than click Upload button.")
+        $("#query_div").css("display", "none");
+        $("#upload_div").css("display", "block");
 
-        }
-        else if (event.detail.index == 1) {
-            $("#primaryTxt").text("Query Operaions")
-            $("#upload_div").css("display", "none");
-            $("#query_div").css("display", "block");
+    }
+    else if (event.detail.index == 1) {
+        $("#primaryTxt").text("Query Operaions")
+        $("#upload_div").css("display", "none");
+        $("#query_div").css("display", "block");
 
-        }
-    });
-    $("#search_by_image_div").css("display", "none");
-    $("#update_tags_div").css("display", "none");
-    $("#delete_image_div").css("display", "none");
-    $("#view_image_div").css("display", "none");
-    $("#search_by_tags_div").css("display", "block");
-    main_tabBar.activateTab(0);
-    child_tabBar.listen('MDCTabBar:activated', function (event) {
-        if (event.detail.index == 0) {
-            $("#search_by_image_div").css("display", "none");
-            $("#update_tags_div").css("display", "none");
-            $("#delete_image_div").css("display", "none");
-            $("#view_image_div").css("display", "none");
-            $("#search_by_tags_div").css("display", "block");
+    }
+});
+$("#search_by_image_div").css("display", "none");
+$("#update_tags_div").css("display", "none");
+$("#delete_image_div").css("display", "none");
+$("#view_image_div").css("display", "none");
+$("#search_by_tags_div").css("display", "block");
+main_tabBar.activateTab(0);
+child_tabBar.listen('MDCTabBar:activated', function (event) {
+    if (event.detail.index == 0) {
+        $("#search_by_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#search_by_tags_div").css("display", "block");
 
-        } else if (event.detail.index == 1) {
-            $("#search_by_tags_div").css("display", "none");
-            $("#update_tags_div").css("display", "none");
-            $("#delete_image_div").css("display", "none");
-            $("#view_image_div").css("display", "none");
-            $("#search_by_image_div").css("display", "block");
+    } else if (event.detail.index == 1) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#search_by_image_div").css("display", "block");
 
-        } else if (event.detail.index == 2) {
-            $("#search_by_tags_div").css("display", "none");
-            $("#delete_image_div").css("display", "none");
-            $("#search_by_image_div").css("display", "none");
-            $("#update_tags_div").css("display", "none");
-            $("#view_image_div").css("display", "block");
+    } else if (event.detail.index == 2) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#search_by_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#view_image_div").css("display", "block");
 
-        } else if (event.detail.index == 3) {
-            $("#search_by_tags_div").css("display", "none");
-            $("#search_by_image_div").css("display", "none");
-            $("#view_image_div").css("display", "none");
-            $("#delete_image_div").css("display", "none");
-            $("#update_tags_div").css("display", "block");
+    } else if (event.detail.index == 3) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#search_by_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#delete_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "block");
 
-        } else if (event.detail.index == 4) {
-            $("#search_by_tags_div").css("display", "none");
-            $("#search_by_image_div").css("display", "none");
-            $("#view_image_div").css("display", "none");
-            $("#update_tags_div").css("display", "none");
-            $("#delete_image_div").css("display", "block");
+    } else if (event.detail.index == 4) {
+        $("#search_by_tags_div").css("display", "none");
+        $("#search_by_image_div").css("display", "none");
+        $("#view_image_div").css("display", "none");
+        $("#update_tags_div").css("display", "none");
+        $("#delete_image_div").css("display", "block");
 
-        }
-    });
-    child_tabBar.activateTab(0);
+    }
+});
+child_tabBar.activateTab(0);
 
-    $("#selectFileBtn").bind("click", selectFileBtnOnClick);
-    $("#selectFileBtn2").bind("click", selectFile2BtnOnClick);
-    $("#uploadImgBtn").bind("click", uploadImgBtnOnClick);
-    $("#selectFile").bind("change", selectFileChanged);
-    $("#selectFile2").bind("change", selectFile2Changed);
-    $("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
-    $("#searchImgBtn").bind("click", searchImgBtnOnClick);
-    $("#updateImgBtn").bind("click", updateImgBtnOnClick);
-    $("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
-    $("#viewImgBtn").bind("click", viewImgBtnOnClick);
+$("#selectFileBtn").bind("click", selectFileBtnOnClick);
+$("#selectFileBtn2").bind("click", selectFile2BtnOnClick);
+$("#uploadImgBtn").bind("click", uploadImgBtnOnClick);
+$("#selectFile").bind("change", selectFileChanged);
+$("#selectFile2").bind("change", selectFile2Changed);
+$("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
+$("#searchImgBtn").bind("click", searchImgBtnOnClick);
+$("#updateImgBtn").bind("click", updateImgBtnOnClick);
+$("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
+$("#viewImgBtn").bind("click", viewImgBtnOnClick);
 
-    $("#input_tags_search").bind("input", input_tags_searchOnInputChange);
-    $("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
-    $("#input_url_update").bind("input", input_url_updateOnInputChange);
-    $("#input_tags_update").bind("input", input_tags_updateOnInputChange);
-    $("#input_img_delete").bind("input", input_img_deleteOnInputChange);
+$("#input_tags_search").bind("input", input_tags_searchOnInputChange);
+$("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
+$("#input_url_update").bind("input", input_url_updateOnInputChange);
+$("#input_tags_update").bind("input", input_tags_updateOnInputChange);
+$("#input_img_delete").bind("input", input_img_deleteOnInputChange);
 
-}
+// }
 
 function readTokens() {
     // reading id token from the url post login
@@ -469,9 +469,9 @@ function readTokens() {
 function main() {
     readTokens();
     check_session();
-    window.onload = function () {
-        initializeUI;
-    }
+    // window.onload = function () {
+    //     initializeUI;
+    // }
 }
 
 function check_session() {
