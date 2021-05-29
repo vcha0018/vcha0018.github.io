@@ -465,7 +465,7 @@ function readTokens() {
     // reading id token from the url post login
     current_url = window.location.href;
     console.log(current_url);
-    session_token = url.split('&')[0].split('=')[1];
+    session_token = current_url.split('&')[0].split('=')[1];
 }
 
 function main() {
