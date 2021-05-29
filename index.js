@@ -212,7 +212,48 @@ function searchbyTagBtnOnClick() {
 }
 
 function searchImgBtnOnClick() {
+    $("#searchbyTagBtn").prop('disabled', true);
+    input_txt = $("#input_tags_search").val().trim();
+    var c = document.getElementById("viewImgCanvas");
+    var ctx = c.getContext("2d");
+    var img = document.getElementById("viewImg");
+    ctx.drawImage(img, 10, 10);
+    base64_image = c.toDataURL();
+    if (!input_tags.includes(undefined) && !input_tags.includes("")) {
+        var json_data = {
+            "image": base64_image
+        };
+        console.log(json_data);
+        var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
+        $.ajax({
+            method: 'POST',
+            url: post_url,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            // beforeSend: function (xhr) {
+            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+            // },
+            data: JSON.stringify(json_data),
+            success: handleResponse,
+            error: handleResponse
+        });
 
+        function handleResponse(response) {
+            console.log(response);
+            if (response.statusCode == 200) {
+                snackbar.labelText = "Search Successful.";
+                populateList("#imglist2", response.body.links);
+            } else {
+                snackbar.labelText = "There is an error.";
+            }
+            snackbar.open();
+            $("#searchbyTagBtn").prop('disabled', false);
+        }
+    } else {
+        snackbar.labelText = "Not a valid tag string.";
+        snackbar.open();
+    }
 }
 
 function updateImgBtnOnClick() {
