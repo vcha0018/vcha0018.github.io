@@ -476,7 +476,7 @@ function main() {
     readTokens();
     check_session();
     window.onload = function () {
-        initializeUI;
+        initializeUI();
     }
 }
 
