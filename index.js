@@ -97,7 +97,7 @@ $("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
 $("#searchImgBtn").bind("click", searchImgBtnOnClick);
 $("#updateImgBtn").bind("click", updateImgBtnOnClick);
 $("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
-("#viewImgBtn").bind("click", viewImgBtnOnClick);
+$("#viewImgBtn").bind("click", viewImgBtnOnClick);
 
 $("#input_tags_search").bind("input", input_tags_searchOnInputChange);
 $("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
