@@ -195,10 +195,13 @@ function searchbyTagBtnOnClick() {
 
         function handleResponse(response) {
             console.log(response);
-            var message = response.status == 200 ? "Upload Successful." : "Upload failed.";
-            snackbar.labelText = message;
+            if (response.statusCode == 200) {
+                snackbar.labelText = "Search Successful.";
+                populateList("#imglist1", response.body.links);
+            } else {
+                snackbar.labelText = "There is an error.";
+            }
             snackbar.open();
-            populateList("#imglist1", ["Link 1", "Link 2", "Link 3"]);
             $("#searchbyTagBtn").prop('disabled', false);
         }
     } else {
