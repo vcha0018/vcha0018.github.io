@@ -160,7 +160,6 @@ function selectFile2Changed() {
 }
 
 function searchbyTagBtnOnClick() {
-
     $("#searchbyTagBtn").prop('disabled', true);
     input_txt = $("#input_tags_search").val().trim();
     if (input_txt != null && input_txt != "") {
@@ -216,7 +215,59 @@ function searchImgBtnOnClick() {
 }
 
 function updateImgBtnOnClick() {
+    $("#updateImgBtn").prop('disabled', true);
+    input_txt_tags = $("#input_tags_update").val().trim();
+    input_txt_url = $("#input_url_update").val().trim();
+    if (input_txt_tags != null && input_txt_tags != "") {
+        if (input_txt_tags.includes(",")) {
+            var input_tags = input_txt_tags.split(",").map(function (value) {
+                return value.trim();
+            });
+        } else {
+            input_tags = [input_txt_tags];
+        }
+    } else if (input_txt_tags == "") {
+        input_tags = []
+    }
 
+    if (input_txt_url != undefined && input_txt_url != "" && !input_tags.includes(undefined) && !input_tags.includes("")) {
+        console.log(input_tags);
+        var json_data = {
+            "update": {
+                "url": input_txt_url,
+                "tags": input_tags
+            }
+        };
+        var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
+        $.ajax({
+            method: 'POST',
+            url: post_url,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            // beforeSend: function (xhr) {
+            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+            // },
+            data: JSON.stringify(json_data),
+            success: handleResponse,
+            error: handleResponse
+        });
+
+        function handleResponse(response) {
+            console.log(response);
+            if (response.statusCode == 200) {
+                snackbar.labelText = "Search Successful.";
+                populateList("#imglist1", response.body.links);
+            } else {
+                snackbar.labelText = "There is an error.";
+            }
+            snackbar.open();
+            $("#updateImgBtn").prop('disabled', false);
+        }
+    } else {
+        snackbar.labelText = "Not a valid tag string.";
+        snackbar.open();
+    }
 }
 
 function deleteImgBtnOnClick() {
