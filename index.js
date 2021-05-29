@@ -310,7 +310,7 @@ function updateImgBtnOnClick() {
 function deleteImgBtnOnClick() {
     $("#deleteImgBtn").prop('disabled', true);
     input_txt_url = $("#input_img_delete").val().trim();
-    var image_name = input_txt_url.replace('/^.*[\\\/]/', '');
+    var image_name = input_txt_url.substring(input_txt_url.lastIndexOf('/') + 1);
     console.log(image_name);
     if (image_name != undefined && image_name != "") {
         var delete_url = `${api_base_uri}image?key=${image_name}`
@@ -338,34 +338,6 @@ function deleteImgBtnOnClick() {
         snackbar.labelText = "Not a valid string.";
         snackbar.open();
     }
-}
-
-function base64encode(str) {
-    var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    var out = "", i = 0, len = str.length, c1, c2, c3;
-    while (i < len) {
-        c1 = str.charCodeAt(i++) & 0xff;
-        if (i == len) {
-            out += CHARS.charAt(c1 >> 2);
-            out += CHARS.charAt((c1 & 0x3) << 4);
-            out += "==";
-            break;
-        }
-        c2 = str.charCodeAt(i++);
-        if (i == len) {
-            out += CHARS.charAt(c1 >> 2);
-            out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-            out += CHARS.charAt((c2 & 0xF) << 2);
-            out += "=";
-            break;
-        }
-        c3 = str.charCodeAt(i++);
-        out += CHARS.charAt(c1 >> 2);
-        out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-        out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
-        out += CHARS.charAt(c3 & 0x3F);
-    }
-    return out;
 }
 
 function viewImgBtnOnClick() {
