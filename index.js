@@ -465,7 +465,16 @@ function readTokens() {
     // reading id token from the url post login
     current_url = window.location.href;
     console.log(current_url);
-    session_token = current_url.split('&')[0].split('=')[1];
+    try {
+        url_array = current_url.split('&');
+        url_array.forEach(function (item, index) {
+            if (item.includes("id_token")) {
+                session_token = item.split('=')[1];
+            }
+        });
+    } catch (error) {
+        console.log("token retrival failed.");
+    }
 }
 
 function main() {
