@@ -394,7 +394,7 @@ function viewImgBtnOnClick() {
 
         function handleResponse(response) {
             console.log(response);
-            if (response.status == 200) {
+            if (response != null) {
                 snackbar.labelText = "Retrive Successful.";
                 image_base64 = response.image
                 console.log(image_base64);
