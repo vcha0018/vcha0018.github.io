@@ -319,8 +319,10 @@ function viewImgBtnOnClick() {
         $.ajax({
             method: 'GET',
             url: get_url,
+            dataType: "jsonp",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Headers": "*"
             },
             // beforeSend: function (xhr) {
             //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
