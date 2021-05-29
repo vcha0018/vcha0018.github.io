@@ -119,35 +119,43 @@ function uploadImgBtnOnClick() {
     var image_name = "image_" + new Date().getTime();
     var image_file = $("#selectFile")[0].files[0];
     var content_type = image_file.type;
-    console.log(content_type);
-    console.log(image_name);
-    if (content_type.includes("image/")) {
-        var formData = new FormData();
-        var put_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}.${content_type.substr(6)}`
-        console.log(put_url);
-        formData.append("file", image_file);
-        $.ajax({
-            type: 'PUT',
-            url: put_url,
-            data: formData,
-            cache: false,
-            contentType: content_type,
-            processData: false,
-            success: handleResponse,
-            error: handleResponse
-        });
+    var reader = new FileReader();
+    reader.readAsDataURL(image_file);
+    reader.onload = function () {
+        console.log(content_type);
+        image_file = reader.result.substr(reader.result.indexOf("base64,") + 7);
+        image_file = `b'${image_file}'`
+        if (content_type.includes("image/")) {
+            var formData = new FormData();
+            var put_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}.${content_type.substr(6)}`
+            console.log(put_url);
+            formData.append("file", image_file);
+            $.ajax({
+                type: 'PUT',
+                url: put_url,
+                data: formData,
+                cache: false,
+                contentType: content_type,
+                processData: false,
+                success: handleResponse,
+                error: handleResponse
+            });
 
-        function handleResponse(response) {
-            console.log(response);
-            var message = response.status == 200 ? "Upload Successful." : "Upload failed.";
-            snackbar.labelText = message;
+            function handleResponse(response) {
+                console.log(response);
+                var message = response.status == 200 ? "Upload Successful." : "Upload failed.";
+                snackbar.labelText = message;
+                snackbar.open();
+                $("#uploadImgBtn").prop('disabled', false);
+            }
+        } else {
+            snackbar.labelText = "Not a valid image.";
             snackbar.open();
-            $("#uploadImgBtn").prop('disabled', false);
         }
-    } else {
-        snackbar.labelText = "Not a valid image.";
-        snackbar.open();
     }
+    reader.onerror = function (error) {
+        console.log('Error: ', error);
+    };
 }
 
 function selectFileChanged() {
@@ -393,7 +401,7 @@ function viewImgBtnOnClick() {
         });
 
         function handleResponse(response) {
-            console.log(response);
+            // console.log(response);
             if (response.status == 500) {
                 snackbar.labelText = "There is an error.";
             } else {
