@@ -343,7 +343,7 @@ function deleteImgBtnOnClick() {
     }
 }
 
-function base64Encode(str) {
+function base64encode(str) {
     var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     var out = "", i = 0, len = str.length, c1, c2, c3;
     while (i < len) {
@@ -394,7 +394,8 @@ function viewImgBtnOnClick() {
             // console.log(response);
             if (response != null) {
                 snackbar.labelText = "Retrive Successful.";
-                $('#viewImg').attr("src", `data:image/${image_type};base64,${base64encode(response)}`);
+                image_base64 = base64encode(response);
+                $('#viewImg').attr("src", `data:image/${image_type};base64,${image_base64}`);
             } else {
                 snackbar.labelText = "There is an error.";
             }
