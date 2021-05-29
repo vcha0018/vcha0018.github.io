@@ -126,13 +126,13 @@ function uploadImgBtnOnClick() {
         // image_file = reader.result.substr(reader.result.indexOf("base64,") + 7);
         if (content_type.includes("image/")) {
             var formData = new FormData();
-            var put_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}.${content_type.substr(6)}`
+            var put_url = `${api_base_uri}image?key=${image_name}.${content_type.substr(6)}`
             console.log(put_url);
             formData.append("file", image_file);
             $.ajax({
                 type: 'PUT',
                 url: put_url,
-                data: formData,
+                data: image_file,
                 cache: false,
                 contentType: content_type,
                 processData: false,
