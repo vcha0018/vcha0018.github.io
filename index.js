@@ -469,7 +469,9 @@ function readTokens() {
 function main() {
     readTokens();
     check_session();
-    document.onload = initializeUI;
+    window.onload = function () {
+        initializeUI;
+    }
 }
 
 function check_session() {
