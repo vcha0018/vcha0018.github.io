@@ -171,9 +171,10 @@ function searchbyTagBtnOnClick() {
         } else {
             input_tags = [input_txt];
         }
+    } else if (input_txt == "") {
+        input_tags = []
     }
-    if (input_tags != null && input_tags != undefined && input_tags.length > 0 &&
-        !input_tags.includes(undefined) && !input_tags.includes("")) {
+    if (!input_tags.includes(undefined) && !input_tags.includes("")) {
         console.log(input_tags);
         var json_data = {
             "tags": input_tags
