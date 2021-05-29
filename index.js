@@ -1,6 +1,7 @@
 // var MDCTabBar = require('@material/tab-bar');
 // import {MDCTabBar} from '.material/tab-bar';
 
+const session_token = "";
 const api_base_uri = "https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/"
 const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
 [].map.call(document.querySelectorAll(selector), function (el) {
@@ -124,9 +125,13 @@ function uploadImgBtnOnClick() {
         var put_url = `${api_base_uri}image?key=${image_name}.${content_type.substr(6)}`
         console.log(put_url);
         formData.append("file", image_file);
+        console.log(session_token);
         $.ajax({
             type: 'PUT',
             url: put_url,
+            headers: {
+                "Authorization": session_token
+            },
             data: image_file,
             cache: false,
             contentType: content_type,
@@ -456,10 +461,15 @@ function populateList(list_id, list_items) {
         $(list_id).css('display', 'block');
     }
 }
-
-function generateNewChip(id, text) {
-    `<div class="chip">
-    ${text}
-    <span class="closebtn" onclick="this.parentElement.style.display='none'">&times;</span>
-    </div>`
+function readTokens() {
+    // reading id token from the url post login
+    current_url = window.location.href;
+    console.log(current_url);
+    session_token = url.split('&')[0].split('=')[1];
 }
+
+function main() {
+    readTokens();
+}
+
+main();
