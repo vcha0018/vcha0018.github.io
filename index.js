@@ -307,7 +307,7 @@ function deleteImgBtnOnClick() {
 function viewImgBtnOnClick() {
     $("#viewImgBtn").prop('disabled', true);
     input_txt_url = $("#input_url_view_image").val().trim();
-    var image_name = fullPath.replace('/^.*[\\\/]/', '');
+    var image_name = input_txt_url.replace('/^.*[\\\/]/', '');
     console.log(image_name);
     if (image_name != undefined && image_name != "" ) {
         var get_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
