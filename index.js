@@ -376,7 +376,7 @@ function base64encode(str) {
 function viewImgBtnOnClick() {
     $("#viewImgBtn").prop('disabled', true);
     input_txt_url = $("#input_url_view_image").val().trim();
-    var image_name = input_txt_url.substring(url.lastIndexOf('/') + 1);
+    var image_name = input_txt_url.substring(input_txt_url.lastIndexOf('/') + 1);
     var image_type = image_name.split('.').pop();
     console.log(image_type);
     console.log(image_name);
