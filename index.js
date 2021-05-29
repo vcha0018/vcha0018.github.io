@@ -281,6 +281,9 @@ function deleteImgBtnOnClick() {
         $.ajax({
             method: 'DELETE',
             url: delete_url,
+            headers: {
+                "Content-Type": "application/json"
+            },
             // beforeSend: function (xhr) {
             //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
             // },
@@ -316,6 +319,9 @@ function viewImgBtnOnClick() {
         $.ajax({
             method: 'GET',
             url: get_url,
+            headers: {
+                "Content-Type": "application/json"
+            },
             // beforeSend: function (xhr) {
             //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
             // },
