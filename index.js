@@ -97,6 +97,7 @@ $("#searchbyTagBtn").bind("click", searchbyTagBtnOnClick);
 $("#searchImgBtn").bind("click", searchImgBtnOnClick);
 $("#updateImgBtn").bind("click", updateImgBtnOnClick);
 $("#deleteImgBtn").bind("click", deleteImgBtnOnClick);
+("#viewImgBtn").bind("click", viewImgBtnOnClick);
 
 $("#input_tags_search").bind("input", input_tags_searchOnInputChange);
 $("#input_url_view_image").bind("input", input_url_view_imageOnInputChange);
@@ -211,7 +212,7 @@ function searchbyTagBtnOnClick() {
 }
 
 function searchImgBtnOnClick() {
-
+    
 }
 
 function updateImgBtnOnClick() {
@@ -256,22 +257,85 @@ function updateImgBtnOnClick() {
         function handleResponse(response) {
             console.log(response);
             if (response.statusCode == 200) {
-                snackbar.labelText = "Search Successful.";
+                snackbar.labelText = "Update Successful.";
                 populateList("#imglist1", response.body.links);
             } else {
-                snackbar.labelText = "There is an error.";
+                snackbar.labelText = response.body.errorMessage;
             }
             snackbar.open();
             $("#updateImgBtn").prop('disabled', false);
         }
     } else {
-        snackbar.labelText = "Not a valid tag string.";
+        snackbar.labelText = "Not a valid string(s).";
         snackbar.open();
     }
 }
 
 function deleteImgBtnOnClick() {
+    $("#deleteImgBtn").prop('disabled', true);
+    input_txt_url = $("#input_img_delete").val().trim();
+    var image_name = fullPath.replace('/^.*[\\\/]/', '');
+    console.log(image_name);
+    if (image_name != undefined && image_name != "" ) {
+        var delete_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
+        $.ajax({
+            method: 'DELETE',
+            url: delete_url,
+            // beforeSend: function (xhr) {
+            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+            // },
+            success: handleResponse,
+            error: handleResponse
+        });
 
+        function handleResponse(response) {
+            console.log(response);
+            if (response.statusCode == 200) {
+                snackbar.labelText = "Delete Successful.";
+            } else {
+                snackbar.labelText = "There is an error.";
+            }
+            snackbar.open();
+            $("#deleteImgBtn").prop('disabled', false);
+        }
+    } else {
+        snackbar.labelText = "Not a valid string.";
+        snackbar.open();
+    }
+}
+
+function viewImgBtnOnClick() {
+    $("#viewImgBtn").prop('disabled', true);
+    input_txt_url = $("#input_url_view_image").val().trim();
+    var image_name = fullPath.replace('/^.*[\\\/]/', '');
+    console.log(image_name);
+    if (image_name != undefined && image_name != "" ) {
+        var get_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
+        $.ajax({
+            method: 'GET',
+            url: get_url,
+            // beforeSend: function (xhr) {
+            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
+            // },
+            success: handleResponse,
+            error: handleResponse
+        });
+
+        function handleResponse(response) {
+            console.log(response);
+            if (response.statusCode == 200) {
+                snackbar.labelText = "Retrive Successful.";
+                $('#viewImg').attr("src", `data:image/png;base64,${data}`);
+            } else {
+                snackbar.labelText = "There is an error.";
+            }
+            snackbar.open();
+            $("#viewImgBtn").prop('disabled', false);
+        }
+    } else {
+        snackbar.labelText = "Not a valid string.";
+        snackbar.open();
+    }
 }
 
 function input_tags_searchOnInputChange() {
