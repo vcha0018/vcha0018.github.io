@@ -357,6 +357,7 @@ function populateList(list_id, list_items) {
 }
 
 function signOutBtnOnClick() {
+    session_token = undefined;
     window.location.href = `${login_url}?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`;
 }
 
