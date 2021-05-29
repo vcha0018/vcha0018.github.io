@@ -123,8 +123,7 @@ function uploadImgBtnOnClick() {
     reader.readAsDataURL(image_file);
     reader.onload = function () {
         console.log(content_type);
-        image_file = reader.result.substr(reader.result.indexOf("base64,") + 7);
-        image_file = `b'${image_file}'`
+        // image_file = reader.result.substr(reader.result.indexOf("base64,") + 7);
         if (content_type.includes("image/")) {
             var formData = new FormData();
             var put_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}.${content_type.substr(6)}`
