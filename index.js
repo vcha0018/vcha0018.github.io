@@ -231,13 +231,13 @@ function updateImgBtnOnClick() {
     }
 
     if (input_txt_url != undefined && input_txt_url != "" && !input_tags.includes(undefined) && !input_tags.includes("")) {
-        console.log(input_tags);
         var json_data = {
             "update": {
                 "url": input_txt_url,
                 "tags": input_tags
             }
         };
+        console.log(json_data);
         var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
         $.ajax({
             method: 'POST',
