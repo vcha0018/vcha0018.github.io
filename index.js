@@ -188,6 +188,7 @@ function searchbyTagBtnOnClick() {
             method: 'POST',
             url: post_url,
             headers: {
+                "Authorization": session_token,
                 "Content-Type": "application/json"
             },
             // beforeSend: function (xhr) {
@@ -229,6 +230,7 @@ function searchImgBtnOnClick() {
             method: 'POST',
             url: post_url,
             headers: {
+                "Authorization": session_token,
                 "Content-Type": "application/json"
             },
             // beforeSend: function (xhr) {
@@ -285,11 +287,9 @@ function updateImgBtnOnClick() {
             method: 'POST',
             url: post_url,
             headers: {
+                "Authorization": session_token,
                 "Content-Type": "application/json"
             },
-            // beforeSend: function (xhr) {
-            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
-            // },
             data: JSON.stringify(json_data),
             success: handleResponse,
             error: handleResponse
@@ -322,9 +322,9 @@ function deleteImgBtnOnClick() {
         $.ajax({
             method: 'DELETE',
             url: delete_url,
-            // beforeSend: function (xhr) {
-            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
-            // },
+            headers: {
+                "Authorization": session_token
+            },
             success: handleResponse,
             error: handleResponse
         });
@@ -357,9 +357,9 @@ function viewImgBtnOnClick() {
         $.ajax({
             method: 'GET',
             url: get_url,
-            // beforeSend: function (xhr) {
-            //     // xhr.setRequestHeader("Authorization", "Basic " + btoa(""));
-            // },
+            headers: {
+                "Authorization": session_token
+            },
             success: handleResponse,
             error: handleResponse
         });
