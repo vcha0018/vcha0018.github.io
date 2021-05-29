@@ -1,6 +1,7 @@
 // var MDCTabBar = require('@material/tab-bar');
 // import {MDCTabBar} from '.material/tab-bar';
 
+const api_base_uri = "https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/"
 const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
 [].map.call(document.querySelectorAll(selector), function (el) {
     return new mdc.ripple.MDCRipple(el);
@@ -179,7 +180,7 @@ function searchbyTagBtnOnClick() {
         var json_data = {
             "tags": input_tags
         };
-        var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
+        var post_url = `${api_base_uri}query`
         $.ajax({
             method: 'POST',
             url: post_url,
@@ -220,7 +221,7 @@ function searchImgBtnOnClick() {
             "image": base64_image
         };
         console.log(json_data);
-        var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
+        var post_url = `${api_base_uri}query`
         $.ajax({
             method: 'POST',
             url: post_url,
@@ -276,7 +277,7 @@ function updateImgBtnOnClick() {
             }
         };
         console.log(json_data);
-        var post_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/query`
+        var post_url = `${api_base_uri}query`
         $.ajax({
             method: 'POST',
             url: post_url,
@@ -314,7 +315,7 @@ function deleteImgBtnOnClick() {
     var image_name = input_txt_url.replace('/^.*[\\\/]/', '');
     console.log(image_name);
     if (image_name != undefined && image_name != "") {
-        var delete_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
+        var delete_url = `${api_base_uri}image?key=${image_name}`
         $.ajax({
             method: 'DELETE',
             url: delete_url,
@@ -380,7 +381,7 @@ function viewImgBtnOnClick() {
     console.log(image_type);
     console.log(image_name);
     if (image_name != undefined && image_name != "") {
-        var get_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/api_v1/tasks/image?key=${image_name}`
+        var get_url = `${api_base_uri}image?key=${image_name}`
         $.ajax({
             method: 'GET',
             url: get_url,
@@ -392,12 +393,13 @@ function viewImgBtnOnClick() {
         });
 
         function handleResponse(response) {
-            // console.log(response);
-            if (response != null) {
+            console.log(response);
+            if (response.status == 200) {
                 snackbar.labelText = "Retrive Successful.";
-                image_base64 = base64encode(response);
+                image_base64 = response.image
                 console.log(image_base64);
                 $('#viewImg').attr("src", `data:image/${image_type};base64,${image_base64}`);
+                populateList("#imglist3", response.tags);
             } else {
                 snackbar.labelText = "There is an error.";
             }
