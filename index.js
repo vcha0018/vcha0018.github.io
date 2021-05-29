@@ -474,7 +474,7 @@ function main() {
 
 function check_session() {
     if (session_token == undefined || session_token == null || session_token == "") {
-        window.location.href = login_url;
+        window.location.href = `${login_url}?client_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}`;
     }
 }
 
