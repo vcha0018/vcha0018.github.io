@@ -212,7 +212,7 @@ function searchbyTagBtnOnClick() {
 }
 
 function searchImgBtnOnClick() {
-    
+
 }
 
 function updateImgBtnOnClick() {
@@ -274,9 +274,9 @@ function updateImgBtnOnClick() {
 function deleteImgBtnOnClick() {
     $("#deleteImgBtn").prop('disabled', true);
     input_txt_url = $("#input_img_delete").val().trim();
-    var image_name = fullPath.replace('/^.*[\\\/]/', '');
+    var image_name = input_txt_url.replace('/^.*[\\\/]/', '');
     console.log(image_name);
-    if (image_name != undefined && image_name != "" ) {
+    if (image_name != undefined && image_name != "") {
         var delete_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
         $.ajax({
             method: 'DELETE',
@@ -308,8 +308,10 @@ function viewImgBtnOnClick() {
     $("#viewImgBtn").prop('disabled', true);
     input_txt_url = $("#input_url_view_image").val().trim();
     var image_name = input_txt_url.replace('/^.*[\\\/]/', '');
+    var image_type = image_name.split('.').pop();
+    console.log(image_type);
     console.log(image_name);
-    if (image_name != undefined && image_name != "" ) {
+    if (image_name != undefined && image_name != "") {
         var get_url = `https://lr00fm7ci7.execute-api.us-east-1.amazonaws.com/v1/tasks/image?key=${image_name}`
         $.ajax({
             method: 'GET',
@@ -325,12 +327,40 @@ function viewImgBtnOnClick() {
             console.log(response);
             if (response.statusCode == 200) {
                 snackbar.labelText = "Retrive Successful.";
-                $('#viewImg').attr("src", `data:image/png;base64,${data}`);
+                $('#viewImg').attr("src", `data:image/${image_type};base64,${base64encode(response)}`);
             } else {
                 snackbar.labelText = "There is an error.";
             }
             snackbar.open();
             $("#viewImgBtn").prop('disabled', false);
+        }
+
+        function base64Encode(str) {
+            var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+            var out = "", i = 0, len = str.length, c1, c2, c3;
+            while (i < len) {
+                c1 = str.charCodeAt(i++) & 0xff;
+                if (i == len) {
+                    out += CHARS.charAt(c1 >> 2);
+                    out += CHARS.charAt((c1 & 0x3) << 4);
+                    out += "==";
+                    break;
+                }
+                c2 = str.charCodeAt(i++);
+                if (i == len) {
+                    out += CHARS.charAt(c1 >> 2);
+                    out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+                    out += CHARS.charAt((c2 & 0xF) << 2);
+                    out += "=";
+                    break;
+                }
+                c3 = str.charCodeAt(i++);
+                out += CHARS.charAt(c1 >> 2);
+                out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+                out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+                out += CHARS.charAt(c3 & 0x3F);
+            }
+            return out;
         }
     } else {
         snackbar.labelText = "Not a valid string.";
