@@ -228,11 +228,7 @@ function deleteImgBtnOnClick() {
 
         function handleResponse(response) {
             console.log(response);
-            if (response.status == 200 && response.statusText == "") {
-                snackbar.labelText = "Delete Successful.";
-            } else {
-                snackbar.labelText = "There is an error.";
-            }
+            snackbar.labelText = "Operation Done.";
             snackbar.open();
             $("#deleteImgBtn").prop('disabled', false);
         }
