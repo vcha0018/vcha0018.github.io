@@ -473,7 +473,7 @@ function main() {
 }
 
 function check_session() {
-    if (session_token == "") {
+    if (session_token == undefined || session_token == null || session_token == "") {
         window.location.href = login_url;
     }
 }
